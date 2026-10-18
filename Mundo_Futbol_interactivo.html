@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo Fútbol - Portal Interactivo</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Sports Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        pitch: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712;
+            color: #f3f4f6;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        .hero-pattern {
+            background-image: linear-gradient(rgba(5, 46, 22, 0.85), rgba(3, 7, 18, 0.95)), url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-gold-500 selection:text-black">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 bg-gray-950/90 backdrop-blur-md border-b border-gray-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('inicio')">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-pitch-600 to-gold-500 flex items-center justify-center shadow-lg shadow-pitch-900/50">
+                        <i class="fa-solid fa-futbol text-white text-2xl animate-spin" style="animation-duration: 20s;"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-white">MUNDO<span class="text-gold-500">FÚTBOL</span></span>
+                        <p class="text-xs text-gray-400 font-medium">Portal Oficial • Edición Oct 2026</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Tabs -->
+                <nav class="hidden xl:flex items-center space-x-1">
+                    <button onclick="switchTab('inicio')" id="nav-inicio" class="nav-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all text-gold-400 bg-pitch-900/60 border border-pitch-700/50">Inicio</button>
+                    <button onclick="switchTab('torneos')" id="nav-torneos" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-gray-900">Torneos</button>
+                    <button onclick="switchTab('tecnologia')" id="nav-tecnologia" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-gray-900">Tecnología FIFA</button>
+                    <button onclick="switchTab('entrenamientos')" id="nav-entrenamientos" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-gray-900">Entrenamientos</button>
+                    <button onclick="switchTab('minijuego')" id="nav-minijuego" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-gray-900 flex items-center gap-1.5"><i class="fa-solid fa-gamepad text-gold-400"></i> Minijuego Penalties</button>
+                    <button onclick="switchTab('tienda')" id="nav-tienda" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-gray-900">Tienda Oficial</button>
+                    <button onclick="switchTab('resultados')" id="nav-resultados" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-gray-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-gold-400 animate-ping"></span> Resultados por País</button>
+                    <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-gray-900"><i class="fa-solid fa-circle-question text-gold-400 mr-1"></i> Quiz y Estrellas</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="xl:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="p-2.5 rounded-lg bg-gray-900 text-gray-300 hover:text-white border border-gray-800 focus:outline-none">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden xl:hidden bg-gray-950 border-b border-gray-800 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('inicio'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-lg text-base font-semibold text-gold-400 bg-pitch-900/60">Inicio</button>
+            <button onclick="switchTab('torneos'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-gray-900">Torneos</button>
+            <button onclick="switchTab('tecnologia'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-gray-900">Tecnología FIFA</button>
+            <button onclick="switchTab('entrenamientos'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-gray-900">Entrenamientos</button>
+            <button onclick="switchTab('minijuego'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-gray-900 flex items-center gap-2"><i class="fa-solid fa-gamepad text-gold-400"></i> Minijuego Penalties</button>
+            <button onclick="switchTab('tienda'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-gray-900">Tienda Oficial</button>
+            <button onclick="switchTab('resultados'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-gray-900 flex items-center gap-2"><i class="fa-solid fa-globe text-gold-400"></i> Resultados por País</button>
+            <button onclick="switchTab('quiz'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-gray-900"><i class="fa-solid fa-circle-question text-gold-400 mr-2"></i> Quiz y Estrellas</button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow">
+
+        <!-- ================= TAB 1: INICIO ================= -->
+        <section id="tab-inicio" class="tab-content">
+            <!-- Hero Banner -->
+            <div class="hero-pattern py-24 lg:py-32 border-b border-pitch-800">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-gold-500/10 text-gold-400 border border-gold-500/20 mb-6">
+                        <i class="fa-solid fa-trophy"></i> Temporada 2026 Actualizada
+                    </span>
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-6">
+                        La Pasión que <span class="text-transparent bg-clip-text bg-gradient-to-r from-pitch-400 to-gold-400">Une al Planeta</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed mb-10">
+                        Bienvenido al portal definitivo de fútbol. Explora los resultados internacionales actualizados hasta octubre de 2026, la tecnología arbitral de vanguardia, guías de entrenamiento profesional y nuestro simulador interactivo de penales.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="switchTab('resultados')" class="px-8 py-4 rounded-xl bg-gradient-to-r from-pitch-600 to-pitch-700 text-white font-bold text-base shadow-xl shadow-pitch-900/50 hover:from-pitch-500 hover:to-pitch-600 transition-all transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-chart-line mr-2"></i> Ver Resultados por País
+                        </button>
+                        <button onclick="switchTab('minijuego')" class="px-8 py-4 rounded-xl bg-gray-900 text-gold-400 font-bold text-base border border-gold-500/30 hover:bg-gray-800 transition-all transform hover:-translate-y-0.5 shadow-xl">
+                            <i class="fa-solid fa-gamepad mr-2"></i> Jugar Penales
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What is Football & Core Characteristics -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                    <div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-6">¿Qué es el Fútbol y por qué nos mueve?</h2>
+                        <p class="text-gray-300 text-base leading-relaxed mb-4">
+                            El fútbol es mucho más que 22 jugadores persiguiendo un balón en una cancha de césped. Es un lenguaje universal, un catalizador de emociones colectivas y el deporte rey indiscutible de la humanidad.
+                        </p>
+                        <p class="text-gray-300 text-base leading-relaxed mb-6">
+                            Nacido en su versión moderna en la Inglaterra del siglo XIX, hoy en día congrega a más de 3,500 millones de aficionados en todos los rincones del planeta, trascendiendo culturas, idiomas y fronteras.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl bg-gray-900 border border-gray-800">
+                                <span class="block text-3xl font-black text-gold-400 mb-1">211</span>
+                                <span class="text-xs text-gray-400 uppercase font-semibold">Federaciones Afiliadas FIFA</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-gray-900 border border-gray-800">
+                                <span class="block text-3xl font-black text-pitch-400 mb-1">3.5B</span>
+                                <span class="text-xs text-gray-400 uppercase font-semibold">Fanáticos en el Mundo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute -inset-1 rounded-2xl bg-gradient-to-r from-pitch-600 to-gold-500 opacity-30 blur-lg"></div>
+                        <div class="relative rounded-2xl overflow-hidden border border-gray-800 shadow-2xl bg-gray-900">
+                            <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=800&q=80" alt="Fútbol Acción" class="w-full h-80 object-cover transform hover:scale-105 transition-transform duration-700">
+                            <div class="p-6">
+                                <h3 class="text-lg font-bold text-white mb-2">Pasión sin Fronteras</h3>
+                                <p class="text-sm text-gray-400">Cada competición oficial paraliza ciudades enteras y escribe páginas doradas en la historia del deporte mundial.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- World Cup Interactive Tabs & Characteristics -->
+                <div class="bg-gray-900/60 border border-gray-800 rounded-2xl p-6 sm:p-10">
+                    <div class="text-center max-w-2xl mx-auto mb-10">
+                        <h3 class="text-2xl sm:text-3xl font-bold text-white mb-3">La Copa Mundial FIFA: Hitos y Características</h3>
+                        <p class="text-sm text-gray-400">El torneo cumbre del balompié internacional. Explora los aspectos clave que definen la gloria mundialista.</p>
+                    </div>
+
+                    <!-- Tabs Header -->
+                    <div class="flex flex-wrap justify-center gap-2 mb-8" id="wc-tab-buttons">
+                        <button onclick="switchWCTab('formato')" id="wbtn-formato" class="wc-btn px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-pitch-600 text-white shadow-lg">Formato y Expansión</button>
+                        <button onclick="switchWCTab('legado')" id="wbtn-legado" class="wc-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">El Trofeo</button>
+                        <button onclick="switchWCTab('campeones')" id="wbtn-campeones" class="wc-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-gray-800 text-gray-300 hover:bg-gray-700">Potencias Mundiales</button>
+                    </div>
+
+                    <!-- Tabs Content -->
+                    <div id="wctab-formato" class="wc-panel grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-6 rounded-xl bg-gray-950 border border-gray-800">
+                            <div class="w-12 h-12 rounded-lg bg-pitch-900/80 text-pitch-400 flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-users"></i></div>
+                            <h4 class="text-lg font-bold text-white mb-2">48 Selecciones</h4>
+                            <p class="text-sm text-gray-400">A partir de las recientes ediciones, la Copa del Mundo cuenta con 48 equipos nacionales compitiendo por la gloria en una fase de grupos ampliada y eliminatorias electrizantes.</p>
+                        </div>
+                        <div class="p-6 rounded-xl bg-gray-950 border border-gray-800">
+                            <div class="w-12 h-12 rounded-lg bg-gold-500/10 text-gold-400 flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-calendar-days"></i></div>
+                            <h4 class="text-lg font-bold text-white mb-2">Ciclo Cuadrienal</h4>
+                            <p class="text-sm text-gray-400">Cada 4 años, el planeta se detiene durante un mes para presenciar el evento deportivo más visto de la televisión y las plataformas digitales globales.</p>
+                        </div>
+                        <div class="p-6 rounded-xl bg-gray-950 border border-gray-800">
+                            <div class="w-12 h-12 rounded-lg bg-pitch-900/80 text-pitch-400 flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-earth-americas"></i></div>
+                            <h4 class="text-lg font-bold text-white mb-2">Sedes Globales</h4>
+                            <p class="text-sm text-gray-400">Las sedes mundialistas representan una celebración multicultural, uniendo estadios de última generación con la más alta tecnología en infraestructura.</p>
+                        </div>
+                    </div>
+
+                    <div id="wctab-legado" class="wc-panel hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-6 rounded-xl bg-gray-950 border border-gray-800 flex items-start space-x-4">
+                            <div class="p-3 rounded-lg bg-gold-500/10 text-gold-400 text-2xl"><i class="fa-solid fa-award"></i></div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white mb-2">El Trofeo de Oro Macizo</h4>
+                                <p class="text-sm text-gray-400">Fabricado en 18 quilates de oro con una base de malaquita, representa a dos figuras humanas sosteniendo el planeta Tierra. Ningún país se lo queda en propiedad; el campeón recibe una réplica oficial.</p>
+                            </div>
+                        </div>
+                        <div class="p-6 rounded-xl bg-gray-950 border border-gray-800 flex items-start space-x-4">
+                            <div class="p-3 rounded-lg bg-gold-500/10 text-gold-400 text-2xl"><i class="fa-solid fa-star"></i></div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white mb-2">Estrellas en el Escudo</h4>
+                                <p class="text-sm text-gray-400">Cada selección campeona mundial luce con orgullo una estrella dorada sobre su escudo oficial por cada Copa del Mundo conquistada en su historia.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="wctab-campeones" class="wc-panel hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-6 rounded-xl bg-gray-950 border border-gray-800 text-center">
+                            <span class="text-3xl font-black text-gold-400 block mb-1">Brasil, Alemania, Italia, Argentina...</span>
+                            <h4 class="text-base font-bold text-white mb-2">Dinastías Históricas</h4>
+                            <p class="text-sm text-gray-400">Selecciones que han marcado época y dominado el panorama global con múltiples títulos mundiales.</p>
+                        </div>
+                        <div class="p-6 rounded-xl bg-gray-950 border border-gray-800 text-center">
+                            <span class="text-3xl font-black text-pitch-400 block mb-1">Europa y Sudamérica</span>
+                            <h4 class="text-base font-bold text-white mb-2">Dominio Continental</h4>
+                            <p class="text-sm text-gray-400">Las dos confederaciones que han albergado y ganado la totalidad de las Copas del Mundo de la FIFA.</p>
+                        </div>
+                        <div class="p-6 rounded-xl bg-gray-950 border border-gray-800 text-center">
+                            <span class="text-3xl font-black text-gold-400 block mb-1">Nuevos Retadores</span>
+                            <h4 class="text-base font-bold text-white mb-2">Evolución Global</h4>
+                            <p class="text-sm text-gray-400">Equipos de África, Asia y CONCACAF acortan distancias cada año, ofreciendo sorpresas memorables en cada fase final.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: TORNEOS ================= -->
+        <section id="tab-torneos" class="tab-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-gold-400 font-bold uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20">Competiciones de Élite</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-4 mb-4">Torneos que Definen la Historia</h2>
+                    <p class="text-gray-400 text-base">Descubre los campeonatos de clubes más prestigiosos del planeta, donde compiten las máximas figuras del fútbol mundial.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Champions League -->
+                    <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden flex flex-col shadow-xl hover:border-pitch-600 transition-all duration-300">
+                        <div class="h-48 bg-gradient-to-br from-blue-950 to-indigo-950 p-6 flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -right-6 -bottom-6 text-indigo-900/30 text-9xl"><i class="fa-solid fa-star"></i></div>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 w-max border border-blue-500/30">UEFA Champions League</span>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-xl bg-blue-600/30 border border-blue-400/30 flex items-center justify-center text-blue-300 text-2xl font-black">UCL</div>
+                                <div>
+                                    <h3 class="text-xl font-black text-white">La Orejona</h3>
+                                    <p class="text-xs text-indigo-300">El torneo de clubes supremo</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                                La UEFA Champions League reúne cada temporada a los mejores clubes de Europa. Su emblemático himno y las noches mágicas de martes y miércoles cautivan a cientos de millones de espectadores.
+                            </p>
+                            <div class="space-y-3 pt-4 border-t border-gray-800">
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <span>Fundación:</span>
+                                    <span class="text-white font-semibold">1955 (Copa de Europa)</span>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <span>Más Campeón:</span>
+                                    <span class="text-white font-semibold">Real Madrid C.F.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Premier League -->
+                    <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden flex flex-col shadow-xl hover:border-purple-600 transition-all duration-300">
+                        <div class="h-48 bg-gradient-to-br from-purple-950 to-pink-950 p-6 flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -right-6 -bottom-6 text-purple-900/30 text-9xl"><i class="fa-solid fa-crown"></i></div>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 w-max border border-purple-500/30">Premier League</span>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-xl bg-purple-600/30 border border-purple-400/30 flex items-center justify-center text-purple-300 text-2xl font-black">EPL</div>
+                                <div>
+                                    <h3 class="text-xl font-black text-white">Inglaterra Elite</h3>
+                                    <p class="text-xs text-purple-300">La liga más competitiva</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                                Conocida por su intensidad vertiginosa, estadios llenos y vibrantes duelos tácticos. La Premier League inglesa es seguida ávidamente en los 5 continentes con emoción ininterrumpida.
+                            </p>
+                            <div class="space-y-3 pt-4 border-t border-gray-800">
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <span>Fundación:</span>
+                                    <span class="text-white font-semibold">1992</span>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <span>Intensidad:</span>
+                                    <span class="text-gold-400 font-semibold">Máxima Velocidad y Fricción</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Europa League -->
+                    <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden flex flex-col shadow-xl hover:border-amber-600 transition-all duration-300">
+                        <div class="h-48 bg-gradient-to-br from-amber-950 to-orange-950 p-6 flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute -right-6 -bottom-6 text-amber-900/30 text-9xl"><i class="fa-solid fa-shield-halved"></i></div>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 w-max border border-amber-500/30">UEFA Europa League</span>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-xl bg-amber-600/30 border border-amber-400/30 flex items-center justify-center text-amber-300 text-2xl font-black">UEL</div>
+                                <div>
+                                    <h3 class="text-xl font-black text-white">Jueves de Pasión</h3>
+                                    <p class="text-xs text-amber-300">Emoción continental</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                                Un torneo cargado de historia, clubes históricos y enfrentamientos apasionantes los jueves por la noche, otorgando al campeón un boleto directo a la máxima competición de la siguiente temporada.
+                            </p>
+                            <div class="space-y-3 pt-4 border-t border-gray-800">
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <span>Formato:</span>
+                                    <span class="text-white font-semibold">Eliminatorias y Grupos</span>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <span>Prestigio:</span>
+                                    <span class="text-white font-semibold">Alto Nivel Competitivo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: TECNOLOGÍA FIFA ================= -->
+        <section id="tab-tecnologia" class="tab-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-pitch-400 font-bold uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-pitch-900/50 border border-pitch-700/40">Innovación en la Cancha</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-4 mb-4">Tecnología FIFA de Vanguardia</h2>
+                    <p class="text-gray-400 text-base">La ciencia y la inteligencia artificial al servicio de la justicia deportiva y la precisión milimétrica en cada partido.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- VAR Card -->
+                    <div class="p-8 rounded-2xl bg-gray-900 border border-gray-800 flex flex-col justify-between hover:border-pitch-600 transition-all">
+                        <div>
+                            <div class="w-14 h-14 rounded-xl bg-pitch-900 text-pitch-400 flex items-center justify-center text-2xl mb-6">
+                                <i class="fa-solid fa-video"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">VAR (Video Assistant Referee)</h3>
+                            <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                                Sistema de videoarbitraje que revisa jugadas determinantes como goles, penales, tarjetas rojas directas y confusiones de identidad, minimizando los errores arbitrales humanos significativos.
+                            </p>
+                        </div>
+                        <ul class="space-y-2.5 text-xs text-gray-400 border-t border-gray-800 pt-4">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pitch-400"></i> Revisión en tiempo real de ángulos múltiples</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pitch-400"></i> Comunicación directa con el árbitro central</li>
+                        </ul>
+                    </div>
+
+                    <!-- Goal-line Technology -->
+                    <div class="p-8 rounded-2xl bg-gray-900 border border-gray-800 flex flex-col justify-between hover:border-pitch-600 transition-all">
+                        <div>
+                            <div class="w-14 h-14 rounded-xl bg-gold-500/10 text-gold-400 flex items-center justify-center text-2xl mb-6">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Tecnología de Línea de Gol</h3>
+                            <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                                Cámaras especiales de alta velocidad calibradas ópticamente que detectan con precisión de milímetros si el esférico cruzó o no la línea de meta entera, enviando una vibración instantánea al reloj del árbitro.
+                            </p>
+                        </div>
+                        <ul class="space-y-2.5 text-xs text-gray-400 border-t border-gray-800 pt-4">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-gold-400"></i> Respuesta en menos de 1 segundo</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-gold-400"></i> 100% de precisión contra goles fantasma</li>
+                        </ul>
+                    </div>
+
+                    <!-- SAOT -->
+                    <div class="p-8 rounded-2xl bg-gray-900 border border-gray-800 flex flex-col justify-between hover:border-pitch-600 transition-all">
+                        <div>
+                            <div class="w-14 h-14 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-2xl mb-6">
+                                <i class="fa-solid fa-network-wired"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">SAOT (Fuera de Juego Semicosido)</h3>
+                            <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                                Utiliza cámaras de seguimiento corporal dedicadas bajo el techo del estadio y un sensor en el balón para trazar líneas automáticas de fuera de juego con rapidez milimétrica en segundos.
+                            </p>
+                        </div>
+                        <ul class="space-y-2.5 text-xs text-gray-400 border-t border-gray-800 pt-4">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Animaciones 3D automáticas para el público</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i> Reducción drástica del tiempo de espera</li>
+                        </ul>
+                    </div>
+
+                    <!-- Smart Ball -->
+                    <div class="p-8 rounded-2xl bg-gray-900 border border-gray-800 flex flex-col justify-between hover:border-pitch-600 transition-all">
+                        <div>
+                            <div class="w-14 h-14 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-2xl mb-6">
+                                <i class="fa-solid fa-atom"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Balón Inteligente (Connected Ball)</h3>
+                            <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                                Un sensor de unidad de medida inercial (IMU) situado en el centro del esférico envía datos 500 veces por segundo al sistema VAR, registrando el punto exacto de impacto para cada toque.
+                            </p>
+                        </div>
+                        <ul class="space-y-2.5 text-xs text-gray-400 border-t border-gray-800 pt-4">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Detección milimétrica de contacto en manos</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-purple-400"></i> Analítica avanzada de velocidad y efecto</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: ENTRENAMIENTOS ================= -->
+        <section id="tab-entrenamientos" class="tab-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-gold-400 font-bold uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20">Academia y Técnica</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-4 mb-4">Guías de Entrenamiento Profesional</h2>
+                    <p class="text-gray-400 text-base">Domina los fundamentos de pase, control y disparo con explicaciones paso a paso y videos prácticos integrados.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Training 1: Passing -->
+                    <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden shadow-xl">
+                        <div class="relative aspect-video bg-gray-950">
+                            <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/k2436Q3bW9w" title="Football Passing Drills" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-8">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-pitch-900 text-pitch-400 border border-pitch-700">Técnica Nivel 1</span>
+                                <span class="text-xs text-gray-400"><i class="fa-solid fa-clock mr-1"></i> 10 min lectura</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-4">Pase Preciso y Control Orientado</h3>
+                            <ol class="space-y-3 text-sm text-gray-300 list-decimal list-inside">
+                                <li class="leading-relaxed"><strong class="text-white">Posición del pie de apoyo:</strong> Colócalo a unos 10-15 cm del balón apuntando hacia el objetivo.</li>
+                                <li class="leading-relaxed"><strong class="text-white">Superficie de impacto:</strong> Golpea con el interior del pie (la zona del arco) para mayor superficie de contacto y control.</li>
+                                <li class="leading-relaxed"><strong class="text-white">Seguimiento del movimiento:</strong> Acompaña el balón con el tobillo firme tras el impacto para asegurar la trayectoria rasante.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Training 2: Shooting -->
+                    <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden shadow-xl">
+                        <div class="relative aspect-video bg-gray-950">
+                            <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/9Z1kL50y2v4" title="Football Shooting Technique" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-8">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-gold-500/10 text-gold-400 border border-gold-500/20">Técnica Nivel 2</span>
+                                <span class="text-xs text-gray-400"><i class="fa-solid fa-clock mr-1"></i> 12 min lectura</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-4">Disparo Potente y Colocado</h3>
+                            <ol class="space-y-3 text-sm text-gray-300 list-decimal list-inside">
+                                <li class="leading-relaxed"><strong class="text-white">Inclinación corporal:</strong> Inclina el torso ligeramente hacia adelante al momento del impacto para mantener el balón abajo.</li>
+                                <li class="leading-relaxed"><strong class="text-white">Zona de golpeo:</strong> Utiliza los cordones ( empeine ) para disparos con máxima potencia o el interior para colocación.</li>
+                                <li class="leading-relaxed"><strong class="text-white">Vista en el balón:</strong> Mantén los ojos fijos en el esférico hasta que el pie haga contacto total con él.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 5: MINIJUEGO PENALTIES ================= -->
+        <section id="tab-minijuego" class="tab-content hidden">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="text-center mb-8">
+                    <span class="text-gold-400 font-bold uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20">Simulador Interactivo</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-3 mb-2">Tanda de Penales Pro</h2>
+                    <p class="text-gray-400 text-sm">Elige dirección y potencia para vencer al portero artificial. ¡Demuestra tu puntería!</p>
+                </div>
+
+                <!-- Game Container -->
+                <div class="bg-gray-900 border border-gray-800 rounded-3xl p-6 shadow-2xl max-w-3xl mx-auto">
+                    <!-- Scoreboard -->
+                    <div class="flex justify-between items-center bg-gray-950 px-6 py-4 rounded-2xl border border-gray-800 mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-pitch-900 text-pitch-400 flex items-center justify-center font-bold">YOU</div>
+                            <div>
+                                <span class="text-xs text-gray-400 block">Goles Anotados</span>
+                                <span id="game-score" class="text-2xl font-black text-white">0</span>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-xs text-gold-400 font-bold uppercase tracking-wider block">Racha Actual</span>
+                            <span id="game-streak" class="text-xl font-extrabold text-gold-400">0</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-right">
+                            <div>
+                                <span class="text-xs text-gray-400 block">Atajadas GK</span>
+                                <span id="game-saves" class="text-2xl font-black text-white">0</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-red-950 text-red-400 flex items-center justify-center font-bold">GK</div>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Area -->
+                    <div class="relative rounded-2xl overflow-hidden border border-gray-800 bg-emerald-900 mb-6 shadow-inner aspect-[16/10]">
+                        <canvas id="penaltyCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+                        <!-- Message Overlay -->
+                        <div id="game-message" class="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center text-center p-6 transition-opacity duration-300">
+                            <div>
+                                <h3 class="text-2xl font-black text-white mb-2">¡Listo para Cobrar!</h3>
+                                <p class="text-sm text-gray-300 mb-6">Haz clic en el área de la portería para elegir dónde disparar o usa los botones de abajo.</p>
+                                <button onclick="startGameLoop()" class="px-8 py-3 rounded-xl bg-gold-500 text-black font-extrabold text-sm hover:bg-gold-400 transition-all shadow-lg">Comenzar Cobros</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Controls & Power Meter -->
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs text-gray-400 mb-1">
+                                <span class="font-semibold text-white">Potencia del Disparo:</span>
+                                <span id="power-val" class="text-gold-400 font-bold">75%</span>
+                            </div>
+                            <input type="range" id="powerRange" min="30" max="100" value="75" class="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-gold-500">
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-3">
+                            <button onclick="shootPenalty('left')" class="py-3 rounded-xl bg-gray-950 hover:bg-pitch-900 border border-gray-800 hover:border-pitch-600 text-white font-bold text-sm transition-all shadow"><i class="fa-solid fa-arrow-left mr-1"></i> Esquina Izquierda</button>
+                            <button onclick="shootPenalty('center')" class="py-3 rounded-xl bg-gray-950 hover:bg-pitch-900 border border-gray-800 hover:border-pitch-600 text-white font-bold text-sm transition-all shadow"><i class="fa-solid fa-arrow-up mr-1"></i> Centro Fuerte</button>
+                            <button onclick="shootPenalty('right')" class="py-3 rounded-xl bg-gray-950 hover:bg-pitch-900 border border-gray-800 hover:border-pitch-600 text-white font-bold text-sm transition-all shadow">Esquina Derecha <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 6: TIENDA OFICIAL ================= -->
+        <section id="tab-tienda" class="tab-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-gold-400 font-bold uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20">Equipamiento Oficial</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-4 mb-4">Tienda de Fútbol Mundial</h2>
+                    <p class="text-gray-400 text-base">Adquiere los botines, balones y camisetas oficiales directamente en las tiendas de las marcas líderes del deporte.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Product 1 -->
+                    <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden flex flex-col justify-between group shadow-xl">
+                        <div>
+                            <div class="h-56 bg-gray-950 relative overflow-hidden flex items-center justify-center p-4">
+                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80" alt="Botines Nike" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-bold bg-black/70 text-gold-400 backdrop-blur-sm">Nike Mercurial</span>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-lg font-bold text-white mb-2">Botines de Alta Velocidad</h3>
+                                <p class="text-xs text-gray-400 mb-4">Diseñados para máxima tracción y aceleración explosiva sobre césped natural.</p>
+                                <span class="text-lg font-black text-white">$249.99 USD</span>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0">
+                            <a href="https://www.nike.com" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-pitch-600 hover:bg-pitch-500 text-white font-bold text-sm text-center block transition-all shadow-lg">
+                                Comprar en Nike <i class="fa-solid fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden flex flex-col justify-between group shadow-xl">
+                        <div>
+                            <div class="h-56 bg-gray-950 relative overflow-hidden flex items-center justify-center p-4">
+                                <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=500&q=80" alt="Balón Adidas" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-bold bg-black/70 text-gold-400 backdrop-blur-sm">Adidas Official</span>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-lg font-bold text-white mb-2">Balón Oficial Match Pro</h3>
+                                <p class="text-xs text-gray-400 mb-4">Aerodinámica perfecta certificada por la FIFA para torneos internacionales.</p>
+                                <span class="text-lg font-black text-white">$169.99 USD</span>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0">
+                            <a href="https://www.adidas.com" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-pitch-600 hover:bg-pitch-500 text-white font-bold text-sm text-center block transition-all shadow-lg">
+                                Comprar en Adidas <i class="fa-solid fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden flex flex-col justify-between group shadow-xl">
+                        <div>
+                            <div class="h-56 bg-gray-950 relative overflow-hidden flex items-center justify-center p-4">
+                                <img src="https://images.unsplash.com/photo-1529748055610-449bc336b934?auto=format&fit=crop&w=500&q=80" alt="Camiseta Selección" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-bold bg-black/70 text-gold-400 backdrop-blur-sm">Puma Pro Kit</span>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-lg font-bold text-white mb-2">Jersey Selección Nacional</h3>
+                                <p class="text-xs text-gray-400 mb-4">Tecnología dryCELL de absorción de humedad con escudos bordados de alta definición.</p>
+                                <span class="text-lg font-black text-white">$99.99 USD</span>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0">
+                            <a href="https://us.puma.com" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-pitch-600 hover:bg-pitch-500 text-white font-bold text-sm text-center block transition-all shadow-lg">
+                                Comprar en Puma <i class="fa-solid fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden flex flex-col justify-between group shadow-xl">
+                        <div>
+                            <div class="h-56 bg-gray-950 relative overflow-hidden flex items-center justify-center p-4">
+                                <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=500&q=80" alt="Guantes Arquero" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-bold bg-black/70 text-gold-400 backdrop-blur-sm">Store Pro</span>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-lg font-bold text-white mb-2">Guantes de Portero Pro</h3>
+                                <p class="text-xs text-gray-400 mb-4">Látex alemán de máxima adherencia para atajadas seguras bajo cualquier clima.</p>
+                                <span class="text-lg font-black text-white">$129.99 USD</span>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0">
+                            <a href="https://www.nike.com" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-pitch-600 hover:bg-pitch-500 text-white font-bold text-sm text-center block transition-all shadow-lg">
+                                Ver Equipamiento <i class="fa-solid fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 7: RESULTADOS POR PAÍS ================= -->
+        <section id="tab-resultados" class="tab-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="text-gold-400 font-bold uppercase tracking-widest text-xs px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20">Base de Datos Mundial</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-white mt-4 mb-4">Resultados por País (hasta Oct 2026)</h2>
+                    <p class="text-gray-400 text-base">Busca cualquier selección nacional del mundo para consultar sus últimos 10 partidos oficiales, incluyendo la Copa del Mundo 2026 y eliminatorias o amistosos hasta octubre de 2026.</p>
+                </div>
+
+                <!-- Search Input Bar -->
+                <div class="max-w-xl mx-auto mb-10 relative">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="countrySearchInput" oninput="filterCountries()" placeholder="Buscar selección nacional (ej. Colombia, España, Argentina, México)..." class="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-900 border border-gray-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-gold-500 transition-all shadow-xl">
+                </div>
+
+                <!-- Countries Grid -->
+                <div id="countriesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-12">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Selected Country Results Modal / Card Container -->
+                <div id="countryResultsContainer" class="hidden bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-10 shadow-2xl">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-gray-800 mb-8 gap-4">
+                        <div class="flex items-center space-x-4">
+                            <div id="selectedCountryFlag" class="text-4xl">🇨🇴</div>
+                            <div>
+                                <h3 id="selectedCountryName" class="text-2xl font-black text-white">Colombia</h3>
+                                <p class="text-xs text-gray-400">Historial reciente de partidos oficiales (Actualizado al 17 de octubre de 2026)</p>
+                            </div>
+                        </div>
+                        <button onclick="closeCountryResults()" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold text-xs transition-all">
+                            <i class="fa-solid fa-xmark mr-1"></i> Cerrar Historial
+                        </button>
+                    </div>
+
+                    <div id="matchResultsList" class="space-y-4">
+                        <!-- Match items populated via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- NUEVA SECCIÓN: QUIZ Y ESTRELLAS -->
+        <section id="tab-quiz" class="tab-content hidden">
+            <div class="relative overflow-hidden bg-gradient-to-br from-pitch-950 via-gray-900 to-yellow-950 py-14 sm:py-20">
+                <div class="absolute inset-0 opacity-15" style="background-image:radial-gradient(circle at 20% 20%,#facc15 0,transparent 28%),radial-gradient(circle at 80% 80%,#22c55e 0,transparent 30%)"></div>
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-10">
+                        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-300 text-sm font-bold"><i class="fa-solid fa-trophy"></i> RETO MUNDIALISTA</span>
+                        <h2 class="text-4xl sm:text-6xl font-black text-white mt-5">¿ERES UNA <span class="text-yellow-400">LEYENDA</span> DEL FÚTBOL?</h2>
+                        <p class="text-gray-300 max-w-2xl mx-auto mt-4">Pon a prueba tus conocimientos, descubre estrellas y activa el ambiente de estadio.</p>
+                    </div>
+                    <div class="grid lg:grid-cols-3 gap-6 items-start">
+                        <div class="lg:col-span-2 bg-gray-950/80 border border-gray-700 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                            <div class="flex items-center justify-between gap-3 mb-6"><div><p class="text-yellow-400 text-xs font-black tracking-widest">MODO DESAFÍO</p><h3 class="text-2xl font-black text-white">Quiz futbolero</h3></div><div class="text-right"><span class="text-gray-400 text-sm">Puntos</span><div id="quiz-score" class="text-3xl font-black text-yellow-400">0</div></div></div>
+                            <div class="h-2 rounded-full bg-gray-800 mb-6 overflow-hidden"><div id="quiz-progress" class="h-full bg-gradient-to-r from-green-500 to-yellow-400 transition-all" style="width:0%"></div></div>
+                            <p id="quiz-counter" class="text-gray-400 text-sm mb-2">Pregunta 1 de 8</p><h4 id="quiz-question" class="text-xl sm:text-2xl font-bold text-white mb-6">¿Qué país ganó el Mundial de 2022?</h4>
+                            <div id="quiz-options" class="grid sm:grid-cols-2 gap-3"></div>
+                            <div id="quiz-feedback" class="hidden mt-5 rounded-xl p-4 font-semibold" aria-live="polite"></div>
+                            <div class="flex flex-wrap gap-3 mt-6"><button id="quiz-next" onclick="nextQuizQuestion()" class="hidden px-6 py-3 rounded-xl bg-yellow-400 text-gray-950 font-black hover:bg-yellow-300 transition">Siguiente <i class="fa-solid fa-arrow-right ml-2"></i></button><button onclick="restartQuiz()" class="px-5 py-3 rounded-xl bg-gray-800 text-white font-bold hover:bg-gray-700 transition"><i class="fa-solid fa-rotate-right mr-2"></i>Reiniciar quiz</button></div>
+                        </div>
+                        <div class="space-y-5">
+                            <div class="bg-gradient-to-br from-green-900/70 to-gray-950 border border-green-700/50 rounded-3xl p-6">
+                                <div class="flex items-center justify-between"><div><p class="text-green-300 text-xs font-black tracking-widest">AMBIENTE DE ESTADIO</p><h3 class="text-xl font-black text-white mt-1">¡Que suene el fútbol!</h3></div><i class="fa-solid fa-volume-high text-3xl text-green-300"></i></div>
+                                <p class="text-sm text-gray-300 mt-3">Activa un ritmo original de estadio creado por la página. No reproduce la canción oficial del Mundial.</p>
+                                <button id="music-toggle" onclick="toggleStadiumMusic()" class="w-full mt-5 px-4 py-3 rounded-xl bg-green-500 text-gray-950 font-black hover:bg-green-400 transition"><i class="fa-solid fa-play mr-2"></i> Activar ambiente</button>
+                                <p id="music-status" class="text-xs text-gray-400 mt-3 text-center">La música empieza solo cuando pulses el botón.</p>
+                            </div>
+                            <div class="bg-gray-950/80 border border-gray-700 rounded-3xl p-6"><p class="text-yellow-400 text-xs font-black tracking-widest">TU MARCADOR</p><div class="text-4xl font-black text-white mt-2"><span id="quiz-final-score">0</span><span class="text-lg text-gray-400"> / 8</span></div><p id="quiz-rank" class="text-gray-300 mt-2">¡Vamos, comienza el reto!</p><div class="mt-4 flex gap-1 text-2xl" aria-hidden="true">⚽ 🏆 ⚽</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+                <div class="text-center mb-9"><p class="text-yellow-400 font-black tracking-widest text-sm">LAS ESTRELLAS</p><h3 class="text-3xl sm:text-4xl font-black text-white mt-2">Jugadores que inspiran</h3><p class="text-gray-400 mt-3">Un vistazo a algunas figuras del fútbol mundial.</p></div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <article class="group overflow-hidden rounded-3xl bg-gray-900 border border-gray-800 hover:border-yellow-400/60 transition"><div class="h-44 bg-gradient-to-br from-sky-900 to-blue-950 flex items-center justify-center relative"><span class="text-7xl">🇦🇷</span><span class="absolute top-3 left-3 bg-black/40 rounded-full px-3 py-1 text-xs font-bold text-white">ARGENTINA</span><span class="absolute bottom-3 right-4 text-5xl font-black text-white/20">10</span></div><div class="p-5"><h4 class="text-xl font-black text-white">Lionel Messi</h4><p class="text-yellow-400 text-sm font-bold">Delantero • Inter Miami</p><p class="text-gray-400 text-sm mt-3">Campeón del mundo en 2022 y reconocido por su visión, regate y creación de juego.</p></div></article>
+                    <article class="group overflow-hidden rounded-3xl bg-gray-900 border border-gray-800 hover:border-yellow-400/60 transition"><div class="h-44 bg-gradient-to-br from-green-900 to-yellow-950 flex items-center justify-center relative"><span class="text-7xl">🇵🇹</span><span class="absolute top-3 left-3 bg-black/40 rounded-full px-3 py-1 text-xs font-bold text-white">PORTUGAL</span><span class="absolute bottom-3 right-4 text-5xl font-black text-white/20">7</span></div><div class="p-5"><h4 class="text-xl font-black text-white">Cristiano Ronaldo</h4><p class="text-yellow-400 text-sm font-bold">Delantero • Portugal</p><p class="text-gray-400 text-sm mt-3">Destaca por su potencia, juego aéreo, disciplina y capacidad goleadora.</p></div></article>
+                    <article class="group overflow-hidden rounded-3xl bg-gray-900 border border-gray-800 hover:border-yellow-400/60 transition"><div class="h-44 bg-gradient-to-br from-yellow-800 to-green-950 flex items-center justify-center relative"><span class="text-7xl">🇧🇷</span><span class="absolute top-3 left-3 bg-black/40 rounded-full px-3 py-1 text-xs font-bold text-white">BRASIL</span><span class="absolute bottom-3 right-4 text-5xl font-black text-white/20">10</span></div><div class="p-5"><h4 class="text-xl font-black text-white">Neymar Jr.</h4><p class="text-yellow-400 text-sm font-bold">Atacante • Brasil</p><p class="text-gray-400 text-sm mt-3">Famoso por su habilidad técnica, creatividad y regates en espacios reducidos.</p></div></article>
+                    <article class="group overflow-hidden rounded-3xl bg-gray-900 border border-gray-800 hover:border-yellow-400/60 transition"><div class="h-44 bg-gradient-to-br from-blue-900 to-gray-950 flex items-center justify-center relative"><span class="text-7xl">🇫🇷</span><span class="absolute top-3 left-3 bg-black/40 rounded-full px-3 py-1 text-xs font-bold text-white">FRANCIA</span><span class="absolute bottom-3 right-4 text-5xl font-black text-white/20">10</span></div><div class="p-5"><h4 class="text-xl font-black text-white">Kylian Mbappé</h4><p class="text-yellow-400 text-sm font-bold">Delantero • Francia</p><p class="text-gray-400 text-sm mt-3">Una de las grandes figuras de su generación, con velocidad y definición.</p></div></article>
+                </div>
+                <div class="mt-8 rounded-2xl border border-gray-800 bg-gray-900 p-5 flex flex-col sm:flex-row items-center justify-between gap-4"><div><h4 class="text-white font-black text-lg">¿Quieres seguir jugando?</h4><p class="text-gray-400 text-sm">Después del quiz, prueba también tus reflejos en el minijuego de penales.</p></div><button onclick="switchTab('minijuego')" class="shrink-0 px-5 py-3 rounded-xl bg-green-600 text-white font-black hover:bg-green-500"><i class="fa-solid fa-gamepad mr-2"></i>Jugar penales</button></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 border-t border-gray-800 py-12 text-center text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+            <div class="flex items-center justify-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-pitch-600 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-futbol text-xs"></i>
+                </div>
+                <span class="text-lg font-bold text-white tracking-tight">MUNDO<span class="text-gold-500">FÚTBOL</span></span>
+            </div>
+            <p class="max-w-md mx-auto">Portal interactivo de fútbol profesional, resultados globales y simulador de penales. Desarrollado con pasión deportiva.</p>
+            <p class="text-gray-400 font-semibold pt-4 border-t border-gray-900">© 2026 Mario Parra. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-gold-400', 'bg-pitch-900/60', 'border', 'border-pitch-700/50');
+                btn.classList.add('text-gray-300', 'hover:text-white', 'hover:bg-gray-900');
+            });
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-gray-300', 'hover:text-white', 'hover:bg-gray-900');
+                activeBtn.classList.add('text-gold-400', 'bg-pitch-900/60', 'border', 'border-pitch-700/50');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // World Cup Sub-tabs in Inicio
+        function switchWCTab(subId) {
+            document.querySelectorAll('.wc-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById('wctab-' + subId).classList.remove('hidden');
+
+            document.querySelectorAll('.wc-btn').forEach(b => {
+                b.classList.remove('bg-pitch-600', 'text-white', 'shadow-lg');
+                b.classList.add('bg-gray-800', 'text-gray-300', 'hover:bg-gray-700');
+            });
+            const activeWBtn = document.getElementById('wbtn-' + subId);
+            if (activeWBtn) {
+                activeWBtn.classList.remove('bg-gray-800', 'text-gray-300', 'hover:bg-gray-700');
+                activeWBtn.classList.add('bg-pitch-600', 'text-white', 'shadow-lg');
+            }
+        }
+
+        // ================= PENALTY MINIGAME LOGIC =================
+        const canvas = document.getElementById('penaltyCanvas');
+        const ctx = canvas.getContext('2d');
+        let gameRunning = false;
+        let score = 0;
+        let saves = 0;
+        let streak = 0;
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let ball = { x: canvas.width / 2, y: canvas.height - 50, radius: 12, vx: 0, vy: 0, active: false };
+        let gk = { x: canvas.width / 2 - 30, y: 110, w: 60, h: 20, targetX: canvas.width / 2 - 30 };
+        let targetSpot = { x: canvas.width / 2, y: 120, active: false };
+
+        function startGameLoop() {
+            document.getElementById('game-message').classList.add('opacity-0', 'pointer-events-none');
+            gameRunning = true;
+            resetBall();
+        }
+
+        function resetBall() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height - 40;
+            ball.vx = 0;
+            ball.vy = 0;
+            ball.active = false;
+            targetSpot.active = false;
+            gk.x = canvas.width / 2 - 30;
+            gk.targetX = canvas.width / 2 - 30;
+        }
+
+        canvas.addEventListener('click', (e) => {
+            if (!gameRunning || ball.active) return;
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            // Restrict click to goal area
+            if (clickY < canvas.height * 0.65) {
+                targetSpot = { x: clickX, y: clickY, active: true };
+                fireShot(clickX, clickY);
+            }
+        });
+
+        function shootPenalty(direction) {
+            if (!gameRunning || ball.active) return;
+            let targetX = canvas.width / 2;
+            if (direction === 'left') targetX = canvas.width * 0.3;
+            if (direction === 'right') targetX = canvas.width * 0.7;
+            targetSpot = { x: targetX, y: 120, active: true };
+            fireShot(targetX, 120);
+        }
+
+        function fireShot(tx, ty) {
+            ball.active = true;
+            const power = parseInt(document.getElementById('powerRange').value) / 100;
+            const dx = tx - ball.x;
+            const dy = ty - ball.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            const speed = 14 * power;
+
+            ball.vx = (dx / dist) * speed;
+            ball.vy = (dy / dist) * speed;
+
+            // GK AI reaction
+            gk.targetX = Math.max(40, Math.min(canvas.width - 100, tx - 30 + (Math.random() * 40 - 20)));
+        }
+
+        function updateGame() {
+            if (ball.active) {
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+
+                // Move GK toward target
+                let gkSpeed = 4.5;
+                if (gk.x < gk.targetX) gk.x = Math.min(gk.targetX, gk.x + gkSpeed);
+                if (gk.x > gk.targetX) gk.x = Math.max(gk.targetX, gk.x - gkSpeed);
+
+                // Check goal line (y <= 120)
+                if (ball.y <= 120) {
+                    ball.active = false;
+                    // Goal bounds: x between canvas.width*0.25 and canvas.width*0.75
+                    const inGoalX = ball.x >= canvas.width * 0.22 && ball.x <= canvas.width * 0.78;
+                    const blocked = ball.x >= gk.x && ball.x <= gk.x + gk.w && ball.y >= gk.y && ball.y <= gk.y + gk.h;
+
+                    if (inGoalX && !blocked) {
+                        score++;
+                        streak++;
+                        showMiniMsg("¡GOOOOL!", "text-pitch-400");
+                    } else {
+                        saves++;
+                        streak = 0;
+                        showMiniMsg("¡ATAJÓ EL PORTERO!", "text-red-400");
+                    }
+                    document.getElementById('game-score').innerText = score;
+                    document.getElementById('game-saves').innerText = saves;
+                    document.getElementById('game-streak').innerText = streak;
+
+                    setTimeout(resetBall, 1200);
+                }
+            }
+
+            // Render Scene
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Pitch Grass Pattern
+            ctx.fillStyle = '#065f46';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Penalty Box & Goal
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 3;
+            // Goal Frame
+            ctx.strokeRect(canvas.width * 0.22, 40, canvas.width * 0.56, 80);
+
+            // Penalty Spot
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height - 80, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+
+            // Target Indicator
+            if (targetSpot.active && ball.active) {
+                ctx.beginPath();
+                ctx.arc(targetSpot.x, targetSpot.y, 8, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(234, 179, 8, 0.8)';
+                ctx.fill();
+            }
+
+            // Goalkeeper
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(gk.x, gk.y, gk.w, gk.h);
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(gk.x + gk.w/2, gk.y - 10, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Ball
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            requestAnimationFrame(updateGame);
+        }
+
+        function showMiniMsg(text, colorClass) {
+            const msgBox = document.getElementById('game-message');
+            msgBox.classList.remove('opacity-0', 'pointer-events-none');
+            msgBox.innerHTML = `<h3 class="text-3xl font-black ${colorClass} mb-2">${text}</h3><p class="text-sm text-gray-300">Preparando siguiente cobro...</p>`;
+            setTimeout(() => {
+                msgBox.classList.add('opacity-0', 'pointer-events-none');
+            }, 1000);
+        }
+
+        requestAnimationFrame(updateGame);
+
+        // Power Slider update
+        document.getElementById('powerRange').addEventListener('input', (e) => {
+            document.getElementById('power-val').innerText = e.target.value + '%';
+        });
+
+        // ================= COUNTRIES & MATCH RESULTS DATABASE (UP TO OCT 17, 2026) =================
+        const countriesData = [
+            { id: 'colombia', name: 'Colombia', flag: '🇨🇴', matches: [
+                { date: '06 Oct 2026', rival: 'Perú', score: '2 - 0', result: 'W', comp: 'Eliminatorias / Amistoso' },
+                { date: '26 Sep 2026', rival: 'México', score: '1 - 1', result: 'D', comp: 'Partido Amistoso' },
+                { date: '04 Jul 2026', rival: 'Argentina', score: '1 - 2', result: 'L', comp: 'Copa Mundial 2026 (Cuartos)' },
+                { date: '29 Jun 2026', rival: 'Francia', score: '2 - 1', result: 'W', comp: 'Copa Mundial 2026 (Octavos)' },
+                { date: '24 Jun 2026', rival: 'Japón', score: '2 - 2', result: 'D', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '20 Jun 2026', rival: 'Senegal', score: '1 - 0', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '15 Jun 2026', rival: 'Polonia', score: '3 - 1', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '08 Jun 2026', rival: 'Ecuador', score: '1 - 0', result: 'W', comp: 'Partido Amistoso Pre-Mundial' },
+                { date: '28 Mar 2026', rival: 'Brasil', score: '0 - 1', result: 'L', comp: 'Eliminatorias Conmebol' },
+                { date: '23 Mar 2026', rival: 'Paraguay', score: '2 - 0', result: 'W', comp: 'Eliminatorias Conmebol' }
+            ]},
+            { id: 'espana', name: 'España', flag: '🇪🇸', matches: [
+                { date: '06 Oct 2026', rival: 'Croacia', score: '2 - 1', result: 'W', comp: 'UEFA Nations League' },
+                { date: '03 Oct 2026', rival: 'Chequia', score: '3 - 1', result: 'W', comp: 'UEFA Nations League' },
+                { date: '19 Jul 2026', rival: 'Argentina', score: '1 - 0', result: 'W', comp: 'Copa Mundial 2026 (Gran Final)' },
+                { date: '14 Jul 2026', rival: 'Alemania', score: '2 - 1', result: 'W', comp: 'Copa Mundial 2026 (Semifinal)' },
+                { date: '05 Jul 2026', rival: 'Brasil', score: '2 - 0', result: 'W', comp: 'Copa Mundial 2026 (Cuartos)' },
+                { date: '30 Jun 2026', rival: 'Italia', score: '3 - 1', result: 'W', comp: 'Copa Mundial 2026 (Octavos)' },
+                { date: '25 Jun 2026', rival: 'Marruecos', score: '2 - 2', result: 'D', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '21 Jun 2026', rival: 'Australia', score: '4 - 0', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '16 Jun 2026', rival: 'Uruguay', score: '1 - 1', result: 'D', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '07 Jun 2026', rival: 'Irlanda', score: '3 - 0', result: 'W', comp: 'Partido Amistoso' }
+            ]},
+            { id: 'argentina', name: 'Argentina', flag: '🇦🇷', matches: [
+                { date: '06 Oct 2026', rival: 'Benín', score: '3 - 0', result: 'W', comp: 'Partido Amistoso' },
+                { date: '03 Oct 2026', rival: 'Burkina Faso', score: '7 - 0', result: 'W', comp: 'Partido Amistoso' },
+                { date: '19 Jul 2026', rival: 'España', score: '0 - 1', result: 'L', comp: 'Copa Mundial 2026 (Gran Final)' },
+                { date: '15 Jul 2026', rival: 'Inglaterra', score: '2 - 0', result: 'W', comp: 'Copa Mundial 2026 (Semifinal)' },
+                { date: '04 Jul 2026', rival: 'Colombia', score: '2 - 1', result: 'W', comp: 'Copa Mundial 2026 (Cuartos)' },
+                { date: '29 Jun 2026', rival: 'México', score: '3 - 0', result: 'W', comp: 'Copa Mundial 2026 (Octavos)' },
+                { date: '24 Jun 2026', rival: 'Austria', score: '1 - 1', result: 'D', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '20 Jun 2026', rival: 'Argelia', score: '2 - 0', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '15 Jun 2026', rival: 'Canadá', score: '2 - 0', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '06 Jun 2026', rival: 'Guatemala', score: '4 - 1', result: 'W', comp: 'Partido Amistoso' }
+            ]},
+            { id: 'mexico', name: 'México', flag: '🇲🇽', matches: [
+                { date: '08 Oct 2026', rival: 'Chile', score: '0 - 2', result: 'L', comp: 'Partido Amistoso' },
+                { date: '04 Oct 2026', rival: 'Estados Unidos', score: '0 - 3', result: 'L', comp: 'Partido Amistoso' },
+                { date: '26 Sep 2026', rival: 'Colombia', score: '1 - 1', result: 'D', comp: 'Partido Amistoso' },
+                { date: '29 Jun 2026', rival: 'Argentina', score: '0 - 3', result: 'L', comp: 'Copa Mundial 2026 (Octavos)' },
+                { date: '25 Jun 2026', rival: 'Arabia Saudita', score: '2 - 1', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '21 Jun 2026', rival: 'Países Bajos', score: '1 - 1', result: 'D', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '16 Jun 2026', rival: 'Sudáfrica', score: '2 - 0', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '07 Jun 2026', rival: 'Bolivia', score: '3 - 0', result: 'W', comp: 'Partido Amistoso' },
+                { date: '31 May 2026', rival: 'Suecia', score: '1 - 2', result: 'L', comp: 'Partido Amistoso' },
+                { date: '25 Mar 2026', rival: 'Panamá', score: '2 - 0', result: 'W', comp: 'Liga de Naciones CONCACAF' }
+            ]},
+            { id: 'brasil', name: 'Brasil', flag: '🇧🇷', matches: [
+                { date: '10 Oct 2026', rival: 'Corea del Sur', score: '4 - 1', result: 'W', comp: 'Partido Amistoso' },
+                { date: '06 Oct 2026', rival: 'Japón', score: '2 - 0', result: 'W', comp: 'Partido Amistoso' },
+                { date: '05 Jul 2026', rival: 'España', score: '0 - 2', result: 'L', comp: 'Copa Mundial 2026 (Cuartos)' },
+                { date: '28 Jun 2026', rival: 'Bélgica', score: '3 - 1', result: 'W', comp: 'Copa Mundial 2026 (Octavos)' },
+                { date: '24 Jun 2026', rival: 'Serbia', score: '2 - 0', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '20 Jun 2026', rival: 'Camerún', score: '1 - 0', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '15 Jun 2026', rival: 'Honduras', score: '5 - 0', result: 'W', comp: 'Copa Mundial 2026 (Fase Grupos)' },
+                { date: '08 Jun 2026', rival: 'Estados Unidos', score: '2 - 1', result: 'W', comp: 'Partido Amistoso' },
+                { date: '28 Mar 2026', rival: 'Colombia', score: '1 - 0', result: 'W', comp: 'Eliminatorias Conmebol' },
+                { date: '23 Mar 2026', rival: 'Argentina', score: '0 - 0', result: 'D', comp: 'Eliminatorias Conmebol' 
